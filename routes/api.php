@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\Admin\ManageProductAPIController;
+use App\Http\Controllers\API\apiProductController;
 use App\Http\Controllers\API\Auth\AuthController;
-use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +24,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('register',[AuthController::class,'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function(){
+    Route::group(['middleware' => ['role:admin']], function(){
+        Route::resource('products-manage', ManageProductAPIController::class);
+    });
+
+    Route::group(['middleware' => ['role:user']], function(){
+        Route::resource('products', apiProductController::class);
+    });
 });

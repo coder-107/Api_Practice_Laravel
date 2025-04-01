@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
 use App\Http\Controllers\Controller;
@@ -10,19 +10,6 @@ use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    function __construct()
-    {
-        $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index', 'show']]);
-        $this->middleware('permission:product-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:product-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
-    }
 
     /**
      * Display a listing of the resource.
@@ -33,7 +20,7 @@ class ProductController extends Controller
     public function index(): View
     {
         $products = Product::latest()->paginate(5);
-        return view('products.index', compact('products'))
+        return view('admin.products.index', compact('products'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -45,7 +32,7 @@ class ProductController extends Controller
 
     public function create(): View
     {
-        return view('products.create');
+        return view('admin.products.create');
     }
 
     /**
@@ -58,8 +45,8 @@ class ProductController extends Controller
     public function store(Request $request): RedirectResponse
     {
         request()->validate([
-            'name' => 'required',
-            'detail' => 'required',
+            'title' => 'required',
+            'description' => 'required',
         ]);
 
         Product::create($request->all());
@@ -75,7 +62,7 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
-        return view('products.show', compact('product'));
+        return view('admin.products.show', compact('product'));
     }
 
     /**
@@ -87,7 +74,7 @@ class ProductController extends Controller
 
     public function edit(Product $product): View
     {
-        return view('products.edit', compact('product'));
+        return view('admin.products.edit', compact('product'));
     }
 
     /**
@@ -101,8 +88,8 @@ class ProductController extends Controller
     public function update(Request $request, Product $product): RedirectResponse
     {
         request()->validate([
-            'name' => 'required',
-            'detail' => 'required',
+            'title' => 'required',
+            'description' => 'required',
         ]);
 
         $product->update($request->all());

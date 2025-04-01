@@ -8,15 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
+    /**
+     * Register a new user.
+     */
     public function register(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' =>  ['required', 'confirmed', 'min:8']
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', 'min:8']
         ]);
 
         $user = User::create([
@@ -27,32 +31,53 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
-        // $device = substr($request->userAgent() ?? '', 0, 255);
+        // Assign default role if not specified
+        $defaultRole = Role::where('name', 'user')->first();
+        if ($defaultRole) {
+            $user->assignRole($defaultRole);
+        }
 
         return response()->json([
-            // 'access_token' => $user->createToken($device)->plainTextToken,
-            'message' => 'Registration successful!'
+            'message' => 'Registration successful!',
+            'role' => $defaultRole ? $defaultRole->name : 'No role assigned'
         ], 201);
     }
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
         $user = User::where('email', $request->email)->first();
 
-        if(!$user || !Hash::check($request->password, $user->password))
-        {
-            return response([
-                'message' => ['These credentials do not match with our records.']
-            ]);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'These credentials do not match our records.'
+            ], 401);
         }
 
-        $token = substr($request->userAgent() ?? '', 0, 255);
-        $access_token = $user->CreateToken($token)->plainTextToken;
+        // Check if user has at least one role assigned
+        if ($user->roles->isEmpty()) {
+            return response()->json([
+                'message' => 'User has no assigned role.'
+            ], 403);
+        }
+
+        // Generate access token
+        $device = substr($request->userAgent() ?? '', 0, 255);
+        $access_token = $user->createToken($device)->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->roles->pluck('name')->first()
+            ],
             'access_token' => $access_token,
-            'message' => 'Login Successfully!'
+            'message' => 'Login successful!'
         ]);
     }
 }

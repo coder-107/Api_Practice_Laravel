@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -21,7 +21,7 @@ class UserController extends Controller
     {
         $users = User::latest()->paginate(5);
 
-        return view('users.index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('admin.users.index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -42,14 +42,14 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'role' => 'required'
         ]);
 
         $check = $request->all();
         $check['password'] = Hash::make($request->password);
 
         $users = User::create($check);
-        $users->assignRole($request->input('roles'));
+        $users->assignRole($request->input('role'));
 
         return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
@@ -60,7 +60,7 @@ class UserController extends Controller
     public function show(string $id): View
     {
         $users = User::find($id);
-        return view('users.show', compact('users'));
+        return view('admin.users.show', compact('users'));
     }
 
     /**
@@ -72,7 +72,7 @@ class UserController extends Controller
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
 
-        return view('users.edit', compact('user', 'roles', 'userRole'));
+        return view('admin.users.edit', compact('user', 'roles', 'userRole'));
     }
 
     /**
