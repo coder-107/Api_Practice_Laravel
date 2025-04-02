@@ -17,7 +17,7 @@ class ManageProductAPIController extends Controller
      */
     public function index(): JsonResponse
     {
-        $products = Product::latest();
+        $products = Product::orderBy('id', 'DESC')->get();
         return response()->json([
             'success' => true,
             'data' => $products
@@ -42,6 +42,7 @@ class ManageProductAPIController extends Controller
         }
 
         $product = Product::create($request->all());
+        // dd($product);
 
         return response()->json([
             'success' => true,
@@ -57,8 +58,10 @@ class ManageProductAPIController extends Controller
      * @param Product $product
      * @return JsonResponse
      */
-    public function update(Request $request, Product $product): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
+        $product = Product::find($id);
+        
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required'
@@ -68,12 +71,14 @@ class ManageProductAPIController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
+        // dd($product);
+
         Product::where('id', $product->id)->update([
             'title' => $request->title,
             'description' => $request->description,
         ]);
 
-        dd($product->update());
+        // dd($product->update());
 
         return response()->json([
             'success' => true,
@@ -87,8 +92,10 @@ class ManageProductAPIController extends Controller
      * @param Product $product
      * @return JsonResponse
      */
-    public function destroy(Product $product): JsonResponse
+    public function destroy($id): JsonResponse
     {
+        $product = Product::find($id);
+        
         $product->delete();
 
         return response()->json([

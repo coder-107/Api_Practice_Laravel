@@ -21,7 +21,7 @@ class UserController extends Controller
     {
         $users = User::latest()->paginate(5);
 
-        return view('admin.users.index', compact('users'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -30,7 +30,7 @@ class UserController extends Controller
     public function create(): View
     {
         $roles = Role::pluck('name', 'name')->all();
-        return view('users.create', compact('roles'));
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -41,18 +41,21 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'role' => 'required'
+            'password' => 'required|same:confirm-password|min:8',
+            'roles' => 'required|array'
         ]);
 
-        $check = $request->all();
-        $check['password'] = Hash::make($request->password);
+        // Prepare user data for creation
+        $userData = $request->all();
+        $userData['password'] = Hash::make($request->password);
 
-        $users = User::create($check);
-        $users->assignRole($request->input('role'));
+        $user = User::create($userData);
+
+        $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
+
 
     /**
      * Display the specified resource.

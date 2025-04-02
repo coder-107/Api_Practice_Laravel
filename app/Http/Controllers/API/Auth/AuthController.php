@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
@@ -79,5 +80,16 @@ class AuthController extends Controller
             'access_token' => $access_token,
             'message' => 'Login successful!'
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user) {
+            $user->tokens()->delete();
+        }
+
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\UserDashboardController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,8 +32,11 @@ class LoginController extends Controller
         if(Auth::user()->hasRole('admin'))
         {
             return '/admin/dashboard';
-        }
-            return '/home';
+        } 
+     
+
+            return action([UserDashboardController::class, 'index']);
+        
     }
 
     /**

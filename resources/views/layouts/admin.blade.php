@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css">
-    <title>AdminLTE Layout</title>
+    <title>Admin Panel</title>
 
     <style>
         /* Custom styles can go here */
@@ -21,9 +21,20 @@
         .main-sidebar {
             height: 100vh;
         }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                margin-left: 0; /* Remove left margin on small screens */
+            }
+
+            .main-sidebar {
+                position: fixed; /* Fix sidebar position */
+                z-index: 100; /* Ensure it stays on top */
+                transition: all 0.3s ease; /* Smooth transition for sidebar */
+            }
+        }
     </style>
-
-
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -74,6 +85,7 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
+                        <!-- Uncomment if you have a user profile picture -->
                         <!-- <img src="{{ Auth::user()->profile_picture }}" class="img-circle elevation-2" alt="{{ Auth::user()->name }}"> -->
                     </div>
                     <div class="info">
@@ -119,6 +131,7 @@
 
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/js/adminlte.min.js"></script>

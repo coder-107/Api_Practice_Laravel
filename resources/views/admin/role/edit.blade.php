@@ -7,7 +7,7 @@
             <h2>Edit Role</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('roles.index') }}"> Back</a>
+            <a class="btn btn-primary m-2" href="{{ route('roles.index') }}"> Back</a>
         </div>
     </div>
 </div>

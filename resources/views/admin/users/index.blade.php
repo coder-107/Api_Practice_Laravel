@@ -1,13 +1,15 @@
 @extends('layouts.admin')
 @section('content')
 
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Users Management</h2>
         </div>
         <div class="pull-right">
-            <a class="btn btn-success" href="{{ route('users.create') }}"> Create New User</a>
+            <a class="btn btn-success m-3" href="{{ route('users.create') }}"> Create New User</a>
         </div>
     </div>
 </div>
@@ -22,13 +24,13 @@
     <tr>
         <th>No</th>
         <th>Name</th>
-       <th>Email</th>
+        <th>Email</th>
         <th>Roles</th>
         <th width="280px">Action</th>
     </tr>
     @foreach ($users as $key => $user)
     <tr>
-        <td>{{ ++$i }}</td>
+        <td>{{ ++$key }}</td>
         <td>{{ $user->name }}</td>
         <td>{{ $user->email }}</td>
         <td>
@@ -49,6 +51,8 @@
     @endforeach
 </table>
 
-{!! $users->render() !!}
+<div class="d-flex justify-content-center">
+    {!! $users->links() !!}
+</div>
 <p class="text-center text-primary"><small>Practice By Ami</small></p>
 @endsection
