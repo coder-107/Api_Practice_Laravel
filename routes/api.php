@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Admin\ManagePostApiController;
 use App\Http\Controllers\API\Admin\ManageProductAPIController;
 use App\Http\Controllers\API\Admin\ManageRolesController;
 use App\Http\Controllers\API\Admin\ManageUserController;
@@ -25,6 +26,13 @@ use Illuminate\Support\Facades\Route;
 // Route::apiResource("products", ProductController::class);
 Route::post('register',[AuthController::class,'register']);
 Route::post('login', [AuthController::class, 'login']);
+
+Route::get('blogs',[ManagePostApiController::class, 'index']);
+Route::post('blogs/create', [ManagePostApiController::class, 'store']);
+Route::put('blogs/update/{id}', [ManagePostApiController::class, 'update']);
+Route::get('blogs/show/{id}', [ManagePostApiController::class, 'show']);
+Route::delete('blogs/delete/{id}', [ManagePostApiController::class, 'delete']);
+
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::group(['middleware' => ['role:admin']], function(){

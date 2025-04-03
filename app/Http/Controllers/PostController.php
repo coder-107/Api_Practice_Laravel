@@ -100,4 +100,64 @@ class PostController extends Controller
         $posts = Post::find($id);
         return view('admin.blog.edit', compact('posts'));
     }
+
+    public function update($id, StorePostRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $validated = $request->safe()->except(['title','title']);
+        $validated = $request->safe()->except(['description', 'description']);
+        $validated = $request->safe()->except(['images','images']);
+        $validated = $request->safe()->except(['status','status']);
+
+        $updateinput = $request->all();
+
+        // dd($updatepostimg = $request->file('images'));
+
+        if($updatepostimg = $request->file('images'))
+        {
+            $updatedpath = public_path('storage/post/updatedimg');
+            $postname = 'updateimg'.date('YmdHis').'.'.$updatepostimg->getClientOriginalExtension();
+            $updatepostimg->move($updatedpath, $postname);
+            $updateinput['images'] = 'storage/post/updatedimg/'.$postname;
+        }
+
+        // dd($updateinput['images']);
+
+        $updatepost = Post::find($id);
+        // dd($updatepost);
+        // dd($updateinput);
+        $updatepost->update($updateinput);
+        // dd($updatepost);
+
+        return redirect()->route('blog.home')->with('success', 'Post Updated Successfully!');
+    }
+
+    public function delete($id)
+    {
+        $deletepost = Post::find($id);
+
+        if(!$deletepost)
+        {
+            return redirect()->back()->with('error', 'Post not found');
+        }
+
+        $deletepost->delete();
+
+        return redirect()->route('blog.home')->with('success', 'Post deleted successfully!');
+    }
+
+    public function show($id)
+    {
+        $findpost = Post::find($id);
+
+        if(!$findpost)
+        {
+            return view('blog.home')->with('error', 'Post not found!');
+        }
+
+        $findpost->first();
+
+        return view('admin.blog.show', compact('findpost'));
+    }
 }

@@ -31,7 +31,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <strong>Title</strong>
-                <input type="text" name="title" class="form-control" placeholder="Name">
+                <input type="text" name="title" class="form-control" placeholder="Blog title here">
             </div>
         </div>
 
@@ -45,11 +45,12 @@
         <div class="col-md-12">
             <div class="form-group">
                 <strong>Description:</strong>
-                <textarea class="form-control" style="height: 150px" name="description" placeholder="Description"></textarea>
+                <textarea class="form-control" style="height: 150px" name="description" placeholder="Share your experiance in your words..."></textarea>
             </div>
         </div>
 
         <div class="col-md-12">
+            <strong>Status</strong>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="status" id="status" value="Active">
                 <label class="form-check-label" for="status">Active</label>

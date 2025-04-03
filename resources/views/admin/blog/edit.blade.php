@@ -26,6 +26,7 @@
 <form action="{{route('blog.update', $posts->id)}}" method="post" enctype="multipart/form-data">
 
     @csrf
+    @method('PUT')
 
     <div class="row">
         <div class="col-md-6">
