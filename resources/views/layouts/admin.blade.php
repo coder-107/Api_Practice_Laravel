@@ -99,7 +99,14 @@
                         data-accordion="false">
 
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link active">
+                            <a href="{{ route('admin.home') }}" class="nav-link active">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('users.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Manage User</p>
                             </a>
@@ -116,6 +123,13 @@
                             <a href="{{ route('roles.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-user-tag"></i>
                                 <p>Manage Roles</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('blog.home') }}" class="nav-link">
+                                <i class="nav-icon fas fa-user-tag"></i>
+                                <p>Manage Blogs</p>
                             </a>
                         </li>
 
