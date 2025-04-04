@@ -8,6 +8,8 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserProductController;
 use App\Http\Controllers\UserDashboardController;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -75,3 +77,50 @@ Route::get('/greeting/{locale}', function (string $locale) {
 
 Route::get('lang/home', [LanguageController::class, 'index']);
 Route::post('lang/change', [LanguageController::class, 'change'])->name('changeLang');
+
+// helper Route :
+
+Route::get('call-helpers', function () {
+
+    // dd(
+    //     $isAccessible = Arr::accessible(['a' => 1, 'b' => 2]),
+    //     $isAccessible = Arr::accessible(new Collection),
+    //     $isAccessible = Arr::accessible('abc'), // Not in array [].
+    //     $isAccessible = Arr::accessible(new stdClass)
+    // );
+
+    // $myd = convertYmdToMdy('2025-04-03');
+    // var_dump("converted into 'MYD' : ".$myd);
+
+    // $ymd = convertMdyToYmd('04-03-2025');
+    // var_dump("Converted into 'YMD': " . $ymd);
+
+    // dd(
+    //     $array = Arr::add(['name' => 'John'], 'lname', 'Doe'),
+    //     $array = Arr::add(['name' => 'John', 'mname' => null], 'lname', 'Doe'),
+    //     $array = Arr::add(['name' => 'John', 'mname' => null], 'lname', 'Doe')
+    // );
+
+    // dd($array = Arr::collapse([[1, 2, 3], [4, 5, 6], [7, 8, 9]]));
+
+    // $matrix = Arr::crossJoin([1, 2], ['a', 'b'], ['I', 'II']);
+    // return $matrix;
+
+    // [$keys, $values] = Arr::divide(['name' => 'Desk']);
+    // return [$keys, $values];
+
+    // dd($array = [100, 200, 300],
+ 
+    // $first = Arr::first($array, function (int $value, int $key) {
+    //     return $value >= 150;
+    // }));
+
+    dd(
+        $array = [
+            ['product_id' => 'prod-200', 'name' => 'Desk'],
+            ['product_id' => 'prod-100', 'name' => 'Chair'],
+        ],
+         
+        $keyed = Arr::keyBy($array, 'product_id')
+    );
+});
