@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserProductController;
 use App\Http\Controllers\UserDashboardController;
@@ -62,14 +63,15 @@ Route::group(['middleware' =>  ['role:user|admin|Editor']], function () {
 
 // If you want to provide a custome/specific language to the any of the route then use bellow method:
 
-// Route::get('/greeting/{locale}', function (string $locale) {
-//     if (! in_array($locale, ['en', 'es', 'fr'])) {
-//         abort(400);
-//     }
+Route::get('/greeting/{locale}', function (string $locale) {
+    if (! in_array($locale, ['en', 'es', 'fr'])) {
+        abort(400);
+    }
 
-//     App::setLocale($locale);
-// });
+    App::setLocale($locale);
+});
 
 // Language Routes:
 
-// Route::get('lang/home')
+Route::get('lang/home', [LanguageController::class, 'index']);
+Route::post('lang/change', [LanguageController::class, 'change'])->name('changeLang');

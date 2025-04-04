@@ -212,4 +212,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'supported_locales' => ['en', 'es'], // Add all supported languages here
+
+
 ];
