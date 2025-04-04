@@ -27,11 +27,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('register',[AuthController::class,'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-Route::get('blogs',[ManagePostApiController::class, 'index']);
-Route::post('blogs/create', [ManagePostApiController::class, 'store']);
-Route::put('blogs/update/{id}', [ManagePostApiController::class, 'update']);
-Route::get('blogs/show/{id}', [ManagePostApiController::class, 'show']);
-Route::delete('blogs/delete/{id}', [ManagePostApiController::class, 'delete']);
+Route::prefix('blogs')->controller(ManagePostApiController::class)->group(function(){
+    Route::get('/', 'index');
+    Route::post('/create', 'store');
+    Route::put('/update/{id}', 'update');
+    Route::get('/show/{id}','show');
+    Route::delete('/delete/{id}', 'delete');
+});
 
 Route::middleware('auth:sanctum')->group(function(){
 
