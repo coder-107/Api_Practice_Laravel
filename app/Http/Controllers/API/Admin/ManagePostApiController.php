@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -72,13 +73,26 @@ class ManagePostApiController extends Controller
         ]);
     }
 
-    public function update($id, StorePostRequest $request): JsonResponse
+    public function update($id, UpdatePostRequest $request): JsonResponse
     {
+        dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'images' => 'required',
+            'status' => 'required'
+        ]);
 
-        // dd($request->hasFile('images'));     //false
-        $validated = $request->validated();
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator
+            ]);
+        }
+   //false
+        // $validated = $request->validated();
 
-        $validated = $request->safe()->except(['title', 'description', 'images', 'status']);
+        // $validated = $request->safe()->except(['title', 'description', 'images', 'status']);
     
         $updateInput = $request->all();
         // dd($request->file('images'));

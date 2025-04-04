@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -65,20 +66,19 @@ class PostController extends Controller
     {
         $validated = $request->validated();
 
-        $validated = $request->safe()->except(['title','title']);
-        $validated = $request->safe()->except(['description','description']);
-        $validated = $request->safe()->except(['images','images']);
-        $validated = $request->safe()->except(['status','status']);
+        $validated = $request->safe()->except(['title', 'title']);
+        $validated = $request->safe()->except(['description', 'description']);
+        $validated = $request->safe()->except(['images', 'images']);
+        $validated = $request->safe()->except(['status', 'status']);
 
         $input = $request->all();
         // dd($postimg = $request->file('images'));
 
-        if($postimg = $request->file('images'))
-        {
+        if ($postimg = $request->file('images')) {
             $imagepath = public_path('storage/post');
-            $postname = date('YmdHis').'.'.$postimg->getClientOriginalExtension();
+            $postname = date('YmdHis') . '.' . $postimg->getClientOriginalExtension();
             $postimg->move($imagepath, $postname);
-            $input['images'] = 'storage/post/'.$postname;
+            $input['images'] = 'storage/post/' . $postname;
         }
 
         // dd($input['images']);
@@ -101,44 +101,35 @@ class PostController extends Controller
         return view('admin.blog.edit', compact('posts'));
     }
 
-    public function update($id, StorePostRequest $request): RedirectResponse
+    public function update($id, UpdatePostRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
-        $validated = $request->safe()->except(['title','title']);
-        $validated = $request->safe()->except(['description', 'description']);
-        $validated = $request->safe()->except(['images','images']);
-        $validated = $request->safe()->except(['status','status']);
-
-        $updateinput = $request->all();
-
-        // dd($updatepostimg = $request->file('images'));
-
-        if($updatepostimg = $request->file('images'))
-        {
-            $updatedpath = public_path('storage/post/updatedimg');
-            $postname = 'updateimg'.date('YmdHis').'.'.$updatepostimg->getClientOriginalExtension();
-            $updatepostimg->move($updatedpath, $postname);
-            $updateinput['images'] = 'storage/post/updatedimg/'.$postname;
-        }
-
-        // dd($updateinput['images']);
+        $updateinput = $request->except(['images']);
 
         $updatepost = Post::find($id);
-        // dd($updatepost);
-        // dd($updateinput);
+
+        if ($request->hasFile('images')) {
+            $updatepostimg = $request->file('images');
+            $updatedpath = public_path('storage/post/updatedimg');
+            $postname = 'updateimg' . date('YmdHis') . '.' . $updatepostimg->getClientOriginalExtension();
+            $updatepostimg->move($updatedpath, $postname);
+            $updateinput['images'] = 'storage/post/updatedimg/' . $postname;
+        } else {
+            $updateinput['images'] = $updatepost->images;
+        }
+
         $updatepost->update($updateinput);
-        // dd($updatepost);
 
         return redirect()->route('blog.home')->with('success', 'Post Updated Successfully!');
     }
+
 
     public function delete($id)
     {
         $deletepost = Post::find($id);
 
-        if(!$deletepost)
-        {
+        if (!$deletepost) {
             return redirect()->back()->with('error', 'Post not found');
         }
 
@@ -151,8 +142,7 @@ class PostController extends Controller
     {
         $findpost = Post::find($id);
 
-        if(!$findpost)
-        {
+        if (!$findpost) {
             return view('blog.home')->with('error', 'Post not found!');
         }
 

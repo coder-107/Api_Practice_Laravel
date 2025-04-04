@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserProductController;
 use App\Http\Controllers\UserDashboardController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -58,3 +59,17 @@ Route::group(['middleware' =>  ['role:user|admin|Editor']], function () {
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.home');
     Route::get('/user/product', [UserProductController::class, 'index'])->name('product');
 });
+
+// If you want to provide a custome/specific language to the any of the route then use bellow method:
+
+// Route::get('/greeting/{locale}', function (string $locale) {
+//     if (! in_array($locale, ['en', 'es', 'fr'])) {
+//         abort(400);
+//     }
+
+//     App::setLocale($locale);
+// });
+
+// Language Routes:
+
+// Route::get('lang/home')

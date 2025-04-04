@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 
-class StorePostRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +21,10 @@ class StorePostRequest extends FormRequest
      */
     public function rules(): array
     {
-       
         return [
-            // Custome rule here:
-
-            'title' => 'required',
-            'description' => 'required',
-            'images' => 'required|nullable',
+            'title' => 'nullable',
+            'description' => 'nullable',
+            'images' => 'nullable',
             'status' => 'required'
         ];
     }
@@ -36,10 +32,7 @@ class StorePostRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Title is required!',
-            'description.required' => 'Description is required',
-            'images.required' => 'Please select an image.',
-            'status.required' => 'Status is required'
+            'status' => 'status is required'
         ];
     }
 }
