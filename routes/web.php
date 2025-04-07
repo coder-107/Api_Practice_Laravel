@@ -89,11 +89,11 @@ Route::get('call-helpers', function () {
     //     $isAccessible = Arr::accessible(new stdClass)
     // );
 
-    // $myd = convertYmdToMdy('2025-04-03');
-    // var_dump("converted into 'MYD' : ".$myd);
+    $myd = convertYmdToMdy('2025-04-03');
+    var_dump("converted into 'MYD' : ".$myd);
 
-    // $ymd = convertMdyToYmd('04-03-2025');
-    // var_dump("Converted into 'YMD': " . $ymd);
+    $ymd = convertMdyToYmd('04-03-2025');
+    var_dump("Converted into 'YMD': " . $ymd);
 
     // dd(
     //     $array = Arr::add(['name' => 'John'], 'lname', 'Doe'),
@@ -115,12 +115,12 @@ Route::get('call-helpers', function () {
     //     return $value >= 150;
     // }));
 
-    dd(
-        $array = [
-            ['product_id' => 'prod-200', 'name' => 'Desk'],
-            ['product_id' => 'prod-100', 'name' => 'Chair'],
-        ],
+    // dd(
+    //     $array = [
+    //         ['product_id' => 'prod-200', 'name' => 'Desk'],
+    //         ['product_id' => 'prod-100', 'name' => 'Chair'],
+    //     ],
          
-        $keyed = Arr::keyBy($array, 'product_id')
-    );
+    //     $keyed = Arr::keyBy($array, 'product_id')
+    // );
 });
